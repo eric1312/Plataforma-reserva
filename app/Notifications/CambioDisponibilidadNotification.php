@@ -11,10 +11,11 @@ class CambioDisponibilidadNotification extends Notification
 {
     use Queueable;
 
-    public function __construct(public $disponibilidad) {}
+    public function __construct(public $disponibilidad)
     {
         //
     }
+
 
     public function via(object $notifiable): array
     {

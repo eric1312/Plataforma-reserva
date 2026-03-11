@@ -68,4 +68,8 @@ Route::post('/notificaciones/leidas', function () {
     return back();
 })->name('notificaciones.leer');
 
+Route::get('/', function () {
+    return redirect()->route('login');
+});
+
 Route::get('/funciones-teatro', FuncionesTeatro::class)->name('funciones-teatro');

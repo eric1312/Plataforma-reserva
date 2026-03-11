@@ -7,10 +7,13 @@ use Livewire\Component;
 use App\Mail\ConfirmacionRegistroMail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class Register extends Component
 {
     public $name, $email, $password, $password_confirmation;
+
+    protected $layout = 'layouts.app';
 
     public function register()
     {
@@ -25,18 +28,19 @@ class Register extends Component
             'name' => $this->name,
             'email' => $this->email,
             'password' => Hash::make($this->password),
-            'verification_token' => \Str::random(40),
+            'email_verified_at' => now(),
+            'verification_token' => Str::random(40),
         ]);
 
         $urlConfirmacion = route('confirmar.cuenta', ['token' => $user->verification_token]);
 
-        Mail::to($user->email)->send(new ConfirmacionRegistroMail($user, $urlConfirmacion));
-        
+        // Mail::to($user->email)->send(new ConfirmacionRegistroMail($user, $urlConfirmacion));
+
         return redirect()->route('login');
     }
 
     public function render()
     {
-        return view('livewire.auth.register')->layout('layouts.app');
+        return view('livewire.auth.register');
     }
 }

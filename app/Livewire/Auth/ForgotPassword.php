@@ -15,6 +15,8 @@ class ForgotPassword extends Component
 {
     public string $email = '';
 
+    protected $layout = 'layouts.app';
+
     public function submit()
     {
         $this->validate([
@@ -46,6 +48,6 @@ Mail::to($this->email)->send(new ResetPasswordMail($url));
 
     public function render()
     {
-        return view('livewire.auth.forgot-password')->layout('layouts.app');
+        return view('livewire.auth.forgot-password');
     }
 }

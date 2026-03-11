@@ -20,7 +20,7 @@ class NotificacionReservaMail extends Mailable
     public $reserva;
     public $estado;
 
-    public function __construct()
+    public function __construct($user, $reserva, $estado)
     {
         $this->user = $user;
         $this->reserva = $reserva;
@@ -57,7 +57,7 @@ class NotificacionReservaMail extends Mailable
         return [];
     }
 
-    publi function build()
+    public function build()
     {
         return $this->subject('Notificación de Reserva')
                     ->view('emails.notificacion_reserva');
