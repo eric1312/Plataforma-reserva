@@ -35,7 +35,11 @@
     </table>
 
     <!-- Modal -->
-<div class="modal fade @if($modalReprogramarAbierto) show d-block @endif" tabindex="-1" role="dialog" style="@if($modalReprogramarAbierto) display: block; background-color: rgba(0,0,0,0.5); @else display: none; @endif">
+    @if($modalReprogramarAbierto)
+    <div class="modal fade show d-block" tabindex="-1" role="dialog" style="display: block; background-color: rgba(0,0,0,0.5);">
+    @else
+    <div class="modal fade" tabindex="-1" role="dialog" style="display: none;">
+    @endif
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <form wire:submit.prevent="reprogramarReserva">

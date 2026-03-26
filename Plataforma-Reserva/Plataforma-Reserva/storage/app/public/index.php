@@ -1,2 +1,0 @@
-<?php
-// Silencio es salud
