@@ -61,7 +61,7 @@ class ResetPassword extends Component
             return redirect()->route('login')->with('status', 'Contraseña restablecida con éxito.');
         }
 
-        session()->flash('error', 'No se pudo restablecer la contraseña. Por favor, intenta nuevamente.');
+        session()->flash('error', __($status));
     }
 
     public function render()
