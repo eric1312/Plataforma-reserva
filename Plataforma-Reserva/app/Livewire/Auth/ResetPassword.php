@@ -5,6 +5,7 @@ namespace App\Livewire\Auth;
 use Livewire\Component;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class ResetPassword extends Component
@@ -14,12 +15,14 @@ class ResetPassword extends Component
     public string $password = '';
     public string $password_confirmation = '';
 
-    public function mount($token, $email) 
+    protected $layout = 'layouts.app';
+
+    public function mount($token, $email)
     {
         $this->token = $token;
         $this->email = $email;
 
-        $registro = \DB::table('password_reset_tokens')->where('email', $email)->first();
+        $registro = DB::table('password_reset_tokens')->where('email', $email)->first();
 
         if (!$registro || !Hash::check($token, $registro->token)) {
                 abort(404, 'Token no encontrado o inválido.');
@@ -63,6 +66,6 @@ class ResetPassword extends Component
 
     public function render()
     {
-        return view('livewire.auth.reset-password')->layout('layouts.app');
+        return view('livewire.auth.reset-password');
     }
 }
