@@ -28,7 +28,7 @@
         </main>
 
         <footer class="py-5 text-center">
-            <p class="mb-0 py-5">Empoderado por<a href="https://www.linkedin.com/in/miguelrojasoficial/" class="text-decoration-none" target="_blank"> <strong>MigueRojas</strong></a> | &copy; Todos los derechos reservados</p>
+            <p class="mb-0 py-5">Hecho Por<a href="https://www.linkedin.com/in/eric-alexis-cirimarco-852256213" class="text-decoration-none" target="_blank"> <strong>Eric Cirimarco</strong></a> | &copy; Todos los derechos reservados</p>
         </footer>
 
 

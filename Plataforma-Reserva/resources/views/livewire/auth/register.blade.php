@@ -3,14 +3,23 @@
         <h4 class="text-center mb-1">Registrese</h4>
 
         <form wire:submit.prevent="register">
+            @error('name')
+                <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
             <div class="mb-3">
                 <label class="invisible">Nombre</label>
                 <input type="text" wire:model="name" class="form-control rounded-5" placeholder="Nombre">
             </div>
+            @error('email')
+                <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
             <div class="mb-3">
                 <label class="invisible">Correo electrónico</label>
                 <input type="email" wire:model="email" class="form-control rounded-5" placeholder="Correo Electronico">
             </div>
+            @error('password')
+                <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
             <div class="mb-3">
                 <label class="invisible">Contraseña</label>
                 <input type="password" wire:model="password" class="form-control rounded-5" placeholder="Contraseña">

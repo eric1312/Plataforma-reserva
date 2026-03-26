@@ -11,7 +11,9 @@ class Login extends Component
 
     public $email = '';
     public $password = '';
-    
+
+    protected $layout = 'layouts.app';
+
     public function login()
     {
         $credentials = [
@@ -35,7 +37,7 @@ class Login extends Component
 
         $this->addError('email', 'Correo o contraseña incorrectos');
     }
-    
+
     public function mount($key = null)
     {
          $this->reset(); // Limpia propiedades públicas
@@ -45,7 +47,7 @@ class Login extends Component
 
     public function render()
     {
-        return view('livewire.auth.login')->layout('layouts.app');
+        return view('livewire.auth.login');
 
     }
 }
