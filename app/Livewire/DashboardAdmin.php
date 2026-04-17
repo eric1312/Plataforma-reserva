@@ -25,20 +25,15 @@ class DashboardAdmin extends Component
     public function cargarDatos()
     {
         $this->totalReservas = Reserva::count();
-        $this->pendientes = Reserva::where('estado', 'pendiente')->count();
-        $this->confirmadas = Reserva::where('estado', 'confirmada')->count();
-        $this->canceladas = Reserva::where('estado', 'cancelada')->count();
+        $this->pendientes = Reserva::where('status', 'pending')->count();
+        $this->confirmadas = Reserva::where('status', 'confirmed')->count();
+        $this->canceladas = Reserva::where('status', 'cancelled')->count();
 
-        $this->notificaciones = Auth::user()
-            ->unreadNotifications
-            ->whereIn('type', [
-                CambioDisponibilidadNotification::class,
-                SedeSaturadaNotification::class
-            ])
-            ->take(5);
+        // Temporalmente deshabilitado hasta crear tabla notifications
+        $this->notificaciones = collect([]);
 
         $this->reservasPendientes = Reserva::with('user')
-            ->where('estado', 'pendiente')
+            ->where('status', 'pending')
             ->latest()
             ->take(10)
             ->get();
@@ -47,8 +42,8 @@ class DashboardAdmin extends Component
     public function confirmar($id)
     {
         $reserva = Reserva::find($id);
-        if ($reserva && $reserva->estado === 'pendiente') {
-            $reserva->estado = 'confirmada';
+        if ($reserva && $reserva->status === 'pending') {
+            $reserva->status = 'confirmed';
             $reserva->save();
             $this->cargarDatos();
         }
@@ -57,8 +52,8 @@ class DashboardAdmin extends Component
     public function cancelar($id)
     {
         $reserva = Reserva::find($id);
-        if ($reserva && $reserva->estado !== 'cancelada') {
-            $reserva->estado = 'cancelada';
+        if ($reserva && $reserva->status !== 'cancelled') {
+            $reserva->status = 'cancelled';
             $reserva->save();
             $this->cargarDatos();
         }

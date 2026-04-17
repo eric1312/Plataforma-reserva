@@ -4,26 +4,28 @@ namespace App\Livewire\Admin;
 
 use Livewire\Component;
 use App\Models\Disponibilidad;
+use App\Models\User;
 
 class Disponibilidades extends Component
 {
-    public $fecha, $hora_inicio, $hora_fin;
+    public $user_id, $day_of_week, $start_time, $end_time, $is_available = 1;
     public $disponibilidades;
     public $editId = null;
- 
-    protected $fillable = ['fecha', 'hora_inicio', 'hora_fin'];
 
     protected $rules = [
-        'fecha' => 'required|date',
-        'hora_inicio' => 'required',
-        'hora_fin' => 'required|after:hora_inicio',
+        'user_id' => 'required|exists:Users,id',
+        'day_of_week' => 'required|integer|min:0|max:6',
+        'start_time' => 'required',
+        'end_time' => 'required|after:start_time',
+        'is_available' => 'boolean',
     ];
 
     protected $messages = [
-        'fecha.required' => 'La fecha es obligatoria.',
-        'hora_inicio.required' => 'La hora de inicio es obligatoria.',
-        'hora_fin.required' => 'La hora de fin es obligatoria.',
-        'hora_fin.after' => 'La hora de fin debe ser después de la hora de inicio.',
+        'user_id.required' => 'El profesional es obligatorio.',
+        'day_of_week.required' => 'El día de la semana es obligatorio.',
+        'start_time.required' => 'La hora de inicio es obligatoria.',
+        'end_time.required' => 'La hora de fin es obligatoria.',
+        'end_time.after' => 'La hora de fin debe ser después de la hora de inicio.',
     ];
 
     public function mount()
@@ -33,7 +35,11 @@ class Disponibilidades extends Component
 
     public function loadDisponibilidades()
     {
-        $this->disponibilidades = Disponibilidad::orderBy('fecha')->orderBy('hora_inicio')->get();
+        $this->disponibilidades = Disponibilidad::with('user')
+            ->orderBy('user_id')
+            ->orderBy('day_of_week')
+            ->orderBy('start_time')
+            ->get();
     }
 
     public function save()
@@ -43,20 +49,24 @@ class Disponibilidades extends Component
         if ($this->editId) {
             $disp = Disponibilidad::find($this->editId);
             $disp->update([
-                'fecha' => $this->fecha,
-                'hora_inicio' => $this->hora_inicio,
-                'hora_fin' => $this->hora_fin,
+                'user_id' => $this->user_id,
+                'day_of_week' => $this->day_of_week,
+                'start_time' => $this->start_time,
+                'end_time' => $this->end_time,
+                'is_available' => $this->is_available,
             ]);
             $this->editId = null;
         } else {
             Disponibilidad::create([
-                'fecha' => $this->fecha,
-                'hora_inicio' => $this->hora_inicio,
-                'hora_fin' => $this->hora_fin,
+                'user_id' => $this->user_id,
+                'day_of_week' => $this->day_of_week,
+                'start_time' => $this->start_time,
+                'end_time' => $this->end_time,
+                'is_available' => $this->is_available,
             ]);
         }
 
-        $this->reset(['fecha', 'hora_inicio', 'hora_fin']);
+        $this->reset(['user_id', 'day_of_week', 'start_time', 'end_time', 'is_available']);
         $this->loadDisponibilidades();
     }
 
@@ -64,9 +74,11 @@ class Disponibilidades extends Component
     {
         $disp = Disponibilidad::findOrFail($id);
         $this->editId = $id;
-        $this->fecha = $disp->fecha;
-        $this->hora_inicio = $disp->hora_inicio;
-        $this->hora_fin = $disp->hora_fin;
+        $this->user_id = $disp->user_id;
+        $this->day_of_week = $disp->day_of_week;
+        $this->start_time = $disp->start_time;
+        $this->end_time = $disp->end_time;
+        $this->is_available = $disp->is_available;
     }
 
     public function delete($id)
@@ -77,6 +89,20 @@ class Disponibilidades extends Component
 
     public function render()
     {
-        return view('livewire.admin.disponibilidades');
+        $profesionales = User::where('role', 'professional')->get();
+        $diasSemana = [
+            0 => 'Domingo',
+            1 => 'Lunes',
+            2 => 'Martes',
+            3 => 'Miércoles',
+            4 => 'Jueves',
+            5 => 'Viernes',
+            6 => 'Sábado'
+        ];
+
+        return view('livewire.admin.disponibilidades', [
+            'profesionales' => $profesionales,
+            'diasSemana' => $diasSemana
+        ]);
     }
 }
